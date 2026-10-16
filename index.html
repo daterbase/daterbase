@@ -480,7 +480,7 @@ body.is-comm .dayrail-tab{z-index:410}body.is-comm .dayrail,body.is-comm .dayrai
 .dayrail__rs{position:absolute;left:0;right:0;bottom:0;height:7px;cursor:ns-resize}
 .dayrail__now{position:absolute;left:-4px;right:0;border-top:2px solid var(--danger);z-index:2;pointer-events:none}
 .dayrail__now:before{content:"";position:absolute;left:-1px;top:-5px;width:8px;height:8px;border-radius:50%;background:var(--danger)}
-@media (max-width:899px){.dayrail--d,.dayrail-tab{display:none}}
+@media (max-width:899px){.dayrail--d,.dayrail-tab{display:none}.dayrail-fab{top:auto!important;bottom:calc(96px + env(safe-area-inset-bottom,0px))!important;right:12px!important;box-shadow:0 4px 14px -4px #0004}.m-fab{bottom:calc(150px + env(safe-area-inset-bottom,0px))!important}}
 .dayrail-tab--l{right:auto;left:84px;border:1px solid var(--line);border-left:0;border-radius:0 12px 12px 0}@media (min-width:900px){body.has-rail-r #root{padding-right:var(--rail-w);box-sizing:border-box}body.has-rail-r .comm-full{right:var(--rail-w)!important}body.has-rail-l .main{margin-left:var(--rail-w)}body.has-rail-l .drawer:not(.drawer--docked){left:calc(84px + var(--rail-w))}body.has-rail-l .drawer-scrim{left:calc(84px + var(--rail-w))}body.has-rail-l .comm-full{left:calc(84px + var(--rail-w))!important}.dayrail-fab{display:none}}
 `;document.head.appendChild(st)}catch(_){}})();
 function DayRail({mobile}){
