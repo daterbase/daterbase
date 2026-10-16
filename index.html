@@ -475,7 +475,7 @@ body.is-comm .dayrail-tab{z-index:410}body.is-comm .dayrail,body.is-comm .dayrai
 .dayrail__ev{position:absolute;box-sizing:border-box;border-radius:8px;padding:2px 6px;overflow:hidden;background:color-mix(in srgb,var(--c) 24%,var(--surface));border-left:3px solid var(--c);cursor:grab;user-select:none;-webkit-user-select:none;line-height:1.25}
 .dayrail__ev b{display:block;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .dayrail__ev small{display:block;color:var(--muted);font-size:.82em;white-space:nowrap}
-.dayrail__ev.is-done{opacity:.55}
+.dayrail__ev.is-done{opacity:.55}.dayrail__ev.is-s{display:flex;align-items:center;gap:6px;padding:0 6px}.dayrail__ev.is-s b{display:block;flex:0 1 auto;min-width:0}.dayrail__ev.is-s small{flex:none;font-size:.78em}.dayrail__ev.is-xs small{display:none}
 .dayrail__ev.is-drag{cursor:grabbing;box-shadow:0 6px 16px -6px #0006;z-index:3}
 .dayrail__rs{position:absolute;left:0;right:0;bottom:0;height:7px;cursor:ns-resize}
 .dayrail__now{position:absolute;left:-4px;right:0;border-top:2px solid var(--danger);z-index:2;pointer-events:none}
@@ -529,7 +529,7 @@ onDragOver:(e)=>{if([...e.dataTransfer.types].includes("text/x-dbrail"))e.preven
 onDrop:(e)=>{let id=e.dataTransfer.getData("text/x-dbrail");if(!id)return;e.preventDefault();let it=items.find((x)=>x.id===id);if(!it)return;let m=ymin(e),o={start:it.start||"",end:it.end||""};M.updateItem(id,{start:fm(m),end:fm(m+60)});j(`'${it.title}' ${fm(m)} 시작으로 옮겼어요`,()=>M.updateItem(id,o))},
 children:[Array.from({length:24},(_,h)=>u("div",{className:"dayrail__hr",style:{top:h*HH},children:h?s("span",{children:String(h).padStart(2,"0")}):null},h)),
 ev.map((e)=>{let it=e.it,dg=drag&&drag.id===it.id?drag:null,a=e.a,b=e.b;if(dg){if(dg.mode==="move"){let len=b-a;a=Math.max(0,Math.min(1440-len,a+dg.d));b=a+len}else b=Math.max(a+15,Math.min(1440,b+dg.d))}let n=e.cl.cols.length;
-return u("div",{className:"dayrail__ev"+(it.done?" is-done":"")+(dg?" is-drag":""),style:{top:a/60*HH,height:Math.max(18,(b-a)/60*HH-2),left:`calc(${e.c/n*100}% + 1px)`,width:`calc(${100/n}% - 3px)`,"--c":col(it)},title:it.title,onPointerDown:(x)=>startDrag(x,e,"move"),onClick:(x)=>{if(x.nativeEvent.pointerType==="touch")ctx.openItem(it.id,it.occDate)},onContextMenu:(x)=>menu(x,it),children:[s("b",{children:it.title||"(제목 없음)"}),s("small",{children:fm(a)+"–"+fm(b)}),s("span",{className:"dayrail__rs",onPointerDown:(x)=>startDrag(x,e,"size")})]},it.id+"|"+it.occDate)}),
+let eh=Math.max(18,(b-a)/60*HH-2);return u("div",{className:"dayrail__ev"+(eh<56?" is-s":"")+(eh<26?" is-xs":"")+(it.done?" is-done":"")+(dg?" is-drag":""),style:{top:a/60*HH,height:eh,left:`calc(${e.c/n*100}% + 1px)`,width:`calc(${100/n}% - 3px)`,"--c":col(it)},title:it.title,onPointerDown:(x)=>startDrag(x,e,"move"),onClick:(x)=>{if(x.nativeEvent.pointerType==="touch")ctx.openItem(it.id,it.occDate)},onContextMenu:(x)=>menu(x,it),children:[s("b",{children:it.title||"(제목 없음)"}),s("small",{children:fm(a)+"–"+fm(b)}),s("span",{className:"dayrail__rs",onPointerDown:(x)=>startDrag(x,e,"size")})]},it.id+"|"+it.occDate)}),
 date===K()&&s("div",{className:"dayrail__now",style:{top:nowMin/60*HH}})]})}),!mobile&&s("div",{className:"dayrail__rz "+(E.m==="f"?"dayrail__rz--c":"dayrail__rz--w dayrail__rz--"+E.m),onPointerDown:rzStart})]});
 return mobile?u(se,{children:[s("div",{className:"dayrail-scrim",onClick:()=>toggle(!1)}),panel]}):u(se,{children:[panel,tab]})}
 
