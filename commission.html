@@ -879,7 +879,7 @@ const $=s=>document.querySelector(s);
 const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const won=n=>n==null||n===""||isNaN(n)?"–":"₩"+Number(n).toLocaleString("ko-KR");
 /* 작업 전 가격 = money actually received; 작업 후 가격 = what the work turned out to be worth */
-const recv=c=>{const v=c.quoteBefore??c.price;return v==null||v===""||isNaN(v)?null:Number(v)};
+const recvBase=c=>{const v=c.quoteBefore??c.price;return v==null||v===""||isNaN(v)?null:Number(v)};const exOf=c=>{const e=Number(c.extra);return isNaN(e)||e<=0?0:e};const recv=c=>{const b=recvBase(c),e=exOf(c);return b==null&&!e?null:(b||0)+e};
 const net=c=>{const p=recv(c);return(CANCEL.has(c.status)||!p)?0:(c.source==="크레페"?Math.round(p*0.9):p)};
 const today=()=>{const d=new Date();d.setHours(0,0,0,0);return d};
 const pd=s=>{if(!s)return null;const[y,m,d]=s.split("-").map(Number);return new Date(y,m-1,d)};
@@ -1288,8 +1288,10 @@ function openJob(id,pre){
       <label>완료일<input id="f-done" type="date" value="${esc(c.doneDate)}"></label>
       <label>타입<select id="f-subtype">${opts(SUBTYPES,c.subtype||"")}</select></label>
       <label>받은 곳<select id="f-source">${opts(SOURCES,c.source)}</select></label>
-      <label class="money">작업 전 가격<span><i>₩</i><input id="f-qb" inputmode="numeric" placeholder="0" value="${recv(c)!=null?recv(c).toLocaleString("ko-KR"):""}"></span></label>
+      <label class="money">작업 전 가격<span><i>₩</i><input id="f-qb" inputmode="numeric" placeholder="0" value="${recvBase(c)!=null?recvBase(c).toLocaleString("ko-KR"):""}"></span></label>
       <label class="money">작업 후 가격<span><i>₩</i><input id="f-qa" inputmode="numeric" placeholder="0" value="${c.quoteAfter!=null?Number(c.quoteAfter).toLocaleString("ko-KR"):""}"></span></label>
+      <label class="money">추가금<span><i>₩</i><input id="f-ex" inputmode="numeric" placeholder="0" value="${exOf(c)?exOf(c).toLocaleString("ko-KR"):""}"></span></label>
+      <label>추가금 내용<input id="f-exn" placeholder="예: 급행, 배경 추가" maxlength="40" value="${esc(c.extraNote||"")}"></label>
       <p class="moneysum full" id="f-sum"></p>
       <label class="full">추가사항<textarea id="f-notes">${esc(c.notes)}</textarea></label>
     </form>
@@ -1301,12 +1303,13 @@ function openJob(id,pre){
     <div class="foot"><span>${c0?`<button class="btn" type="button" id="dup">복제</button> <button class="btn danger" type="button" id="del">삭제</button>`:""}</span><button class="btn pri" type="button" id="save">저장</button></div>`);
     /* price block: two inputs, difference and take-home shown as one line underneath */
     const num=el=>{const x=el.value.replace(/[^\d]/g,"");return x?Number(x):null};
-    const upSum=()=>{const b=num($("#f-qb")),a=num($("#f-qa")),p=b,src=$("#f-source").value;
+    const upSum=()=>{const b=num($("#f-qb")),a=num($("#f-qa")),ex=num($("#f-ex"))||0,p=b==null&&!ex?null:(b||0)+ex,src=$("#f-source").value;
       const parts=[];
-      if(b!=null&&a!=null){const d=a-b;parts.push(`차액 <b class="${d>0?"up":d<0?"down":""}">${d===0?"±₩0":(d>0?"+":"−")+won(Math.abs(d))}</b>`)}
+      if(ex)parts.push(`추가금 <b class="up">+${won(ex)}</b>`);
+      if(p!=null&&a!=null){const d=a-p;parts.push(`차액 <b class="${d>0?"up":d<0?"down":""}">${d===0?"±₩0":(d>0?"+":"−")+won(Math.abs(d))}</b>`)}
       if(p){parts.push(`실수령 <b>${won(src==="크레페"?Math.round(p*.9):p)}</b>${src==="크레페"?" <small>(크레페 수수료 10% 제외)</small>":""}`)}
       $("#f-sum").innerHTML=parts.join('<span class="dot">·</span>')||'<small>작업 전 가격은 실제로 받은 금액, 작업 후 가격은 작업해 보니 받아야 할 금액이에요. 수익은 작업 전 가격으로 계산돼요.</small>'};
-    ["#f-qb","#f-qa"].forEach(sel=>{const el=$(sel);el.oninput=()=>{const pos=el.value.length-el.selectionStart;const v=num(el);el.value=v==null?"":v.toLocaleString("ko-KR");const p=Math.max(0,el.value.length-pos);el.setSelectionRange(p,p);upSum()}});
+    ["#f-qb","#f-qa","#f-ex"].forEach(sel=>{const el=$(sel);el.oninput=()=>{const pos=el.value.length-el.selectionStart;const v=num(el);el.value=v==null?"":v.toLocaleString("ko-KR");const p=Math.max(0,el.value.length-pos);el.setSelectionRange(p,p);upSum()}});
     $("#f-source").onchange=upSum;upSum();
     $("#x").onclick=()=>autoClose();S.dismiss=()=>autoClose();
     const hint=()=>{const nm=$("#f-client").value.trim();const others=nm?clientJobs(nm,c0&&c0.id).filter(x=>!CANCEL.has(x.status)):[];
@@ -1354,7 +1357,7 @@ function openJob(id,pre){
   };
   const n=v=>{const x=String(v).replace(/[^\d]/g,"");return x?Number(x):null};
   /* autosave: closing the sheet (닫기, outside click, Esc) saves whatever changed */
-  const pick=o=>JSON.stringify(["client","seq","due","doneDate","type","subtype","source","quoteBefore","quoteAfter","notes","status","images"].map(k=>o[k]??null));
+  const pick=o=>JSON.stringify(["client","seq","due","doneDate","type","subtype","source","quoteBefore","extra","extraNote","quoteAfter","notes","status","images"].map(k=>o[k]??null));
   let snap=pick(c),closing=false;
   const changed=()=>pick(c)!==snap;
   async function autoClose(){if(closing)return;closing=true;
@@ -1363,7 +1366,7 @@ function openJob(id,pre){
     if(!c.client){if(c0||!(c.images||[]).length){close();return}
       closing=false;toast("의뢰인을 입력해야 저장돼요");$("#f-client").focus();return}
     await saveDoc(c,true);toast("자동 저장했어요");close()}
-  const read=()=>{c.client=$("#f-client").value.trim().replace(/님$/,"");c.seq=Math.max(1,Number($("#f-seq").value)||1);c.nick=labelFor(c.client,c.seq,clientJobs(c.client,c.id).length+1);c.due=$("#f-due").value;c.subtype=$("#f-subtype").value;c.source=$("#f-source").value;c.quoteBefore=n($("#f-qb").value);c.quoteAfter=n($("#f-qa").value);c.price=c.quoteBefore;c.doneDate=$("#f-done").value;c.notes=$("#f-notes").value};
+  const read=()=>{c.client=$("#f-client").value.trim().replace(/님$/,"");c.seq=Math.max(1,Number($("#f-seq").value)||1);c.nick=labelFor(c.client,c.seq,clientJobs(c.client,c.id).length+1);c.due=$("#f-due").value;c.subtype=$("#f-subtype").value;c.source=$("#f-source").value;c.extra=n($("#f-ex").value)||null;c.extraNote=$("#f-exn").value.trim();c.quoteBefore=n($("#f-qb").value);c.quoteAfter=n($("#f-qa").value);c.price=c.quoteBefore;c.doneDate=$("#f-done").value;c.notes=$("#f-notes").value};
   draw();
 }
 async function saveDoc(c,quiet){
@@ -1629,7 +1632,7 @@ const stamp=()=>iso(today()).replace(/-/g,"");
 const safeName=x=>String(x||"").replace(/[\\/:*?"<>|]+/g,"_").trim()||"이름없음";
 function commissionsCsv(){
   const cols=[["의뢰인","client"],["회차","seq"],["표시 이름","nick"],["상태","status"],["타입","type"],["세부 타입","subtype"],["받은 곳","source"],["인원수","people"],
-    ["마감일","due"],["완료일","doneDate"],["가격","price"],["작업 전 가격","quoteBefore"],["작업 후 가격","quoteAfter"],["빠른마감","fast"],["이메일","email"],["링크","link"],["추가사항","notes"],["이미지 파일","_imgs"]];
+    ["마감일","due"],["완료일","doneDate"],["가격","price"],["작업 전 가격","quoteBefore"],["작업 후 가격","quoteAfter"],["추가금","extra"],["추가금 내용","extraNote"],["빠른마감","fast"],["이메일","email"],["링크","link"],["추가사항","notes"],["이미지 파일","_imgs"]];
   const q=v=>{v=v==null?"":String(v);return /[",\n\r]/.test(v)?`"${v.replace(/"/g,'""')}"`:v};
   const rows=[...S.c].sort((a,b)=>(a.due||a.doneDate||"")<(b.due||b.doneDate||"")?-1:1).map(c=>cols.map(([,k])=>k==="_imgs"?(c.images||[]).map(i=>i.name).join(" / "):k==="client"?clientOf(c):c[k]).map(q).join(","));
   return "﻿"+[cols.map(c=>c[0]).join(","),...rows].join("\r\n");
@@ -1760,7 +1763,7 @@ document.addEventListener("click",e=>{const el=e.target.closest("[data-ed]");if(
   const old=el.innerHTML;let input;
   if(f==="subtype"){input=document.createElement("select");input.innerHTML=SUBTYPES.map(o=>`<option value="${esc(o)}"${(c.subtype||"")===o?" selected":""}>${esc(o||"타입 없음")}</option>`).join("")}
   else if(f==="due"||f==="doneDate"){input=document.createElement("input");input.type="date";input.value=c[f]||""}
-  else{input=document.createElement("input");input.inputMode="numeric";const v=f==="quoteBefore"?recv(c):c.quoteAfter;input.value=v!=null?Number(v).toLocaleString("ko-KR"):"";input.placeholder="₩";
+  else{input=document.createElement("input");input.inputMode="numeric";const v=f==="quoteBefore"?recvBase(c):c.quoteAfter;input.value=v!=null?Number(v).toLocaleString("ko-KR"):"";input.placeholder="₩";
     input.oninput=()=>{const x=input.value.replace(/[^\d]/g,"");input.value=x?Number(x).toLocaleString("ko-KR"):""}}
   input.className="inl";el.innerHTML="";el.appendChild(input);el.classList.add("editing");input.focus();if(input.select&&input.type!=="date")input.select();
   let done=false;
@@ -1769,7 +1772,7 @@ document.addEventListener("click",e=>{const el=e.target.closest("[data-ed]");if(
     let v=input.value;const patch={};
     if(f==="quoteBefore"||f==="quoteAfter"){const x=v.replace(/[^\d]/g,"");v=x?Number(x):null;patch[f]=v;if(f==="quoteBefore")patch.price=v}
     else patch[f]=v;
-    const cur=f==="quoteBefore"?recv(c):c[f]??(f==="subtype"?"":null);
+    const cur=f==="quoteBefore"?recvBase(c):c[f]??(f==="subtype"?"":null);
     if((cur??"")===(v??"")){el.innerHTML=old;el.classList.remove("editing");return}
     try{await db.collection("commissions").doc(c.id).update(patch);toast("수정했어요")}catch(err){el.innerHTML=old;el.classList.remove("editing");toast("수정하지 못했어요")}};
   input.addEventListener("keydown",k=>{if(k.key==="Enter"){k.preventDefault();finish(true)}else if(k.key==="Escape"){k.preventDefault();k.stopPropagation();finish(false)}});
