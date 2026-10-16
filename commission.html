@@ -29,7 +29,7 @@ html body .list.tbl .job .st,html body .list.tbl .job .lab,html body .list.tbl .
 html body .list.tbl .job .dd.late,html body .list.tbl .job .dd.soon{background:var(--mute-soft,transparent)!important;padding:.5rem .25rem!important}
 html body .dueband{border-radius:.75rem!important}
 html body h2.sec{margin-top:1rem}
-}</style></head><body>
+}</style><style id="cmShowCss">html.cm-nb .job .b4,html.cm-nb .jhead span:nth-last-child(2),html.cm-nb .l2>*:nth-child(1),html.cm-nb label.money:has(#f-qb){display:none!important}html.cm-na .job .af,html.cm-na .jhead span:last-child,html.cm-na .l2>*:nth-child(3),html.cm-na label.money:has(#f-qa){display:none!important}html.cm-nd .l2>*:nth-child(2){display:none!important}html.cm-nx label.money:has(#f-ex),html.cm-nx label:has(#f-exn){display:none!important}</style></head><body>
 <title>COMMISSION 작업실</title>
 <script>/*!
 
@@ -879,7 +879,7 @@ const $=s=>document.querySelector(s);
 const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const won=n=>n==null||n===""||isNaN(n)?"–":"₩"+Number(n).toLocaleString("ko-KR");
 /* 작업 전 가격 = money actually received; 작업 후 가격 = what the work turned out to be worth */
-const recvBase=c=>{const v=c.quoteBefore??c.price;return v==null||v===""||isNaN(v)?null:Number(v)};const exOf=c=>{const e=Number(c.extra);return isNaN(e)||e<=0?0:e};const recv=c=>{const b=recvBase(c),e=exOf(c);return b==null&&!e?null:(b||0)+e};
+const SHOW=(()=>{try{return JSON.parse(localStorage.getItem("cm-show")||"{}")||{}}catch(e){return{}}})();const applyShow=()=>{const r=document.documentElement.classList;r.toggle("cm-nb",SHOW.b===0);r.toggle("cm-na",SHOW.a===0);r.toggle("cm-nd",SHOW.d===0);r.toggle("cm-nx",SHOW.x===0)};applyShow();const recvBase=c=>{const v=c.quoteBefore??c.price;return v==null||v===""||isNaN(v)?null:Number(v)};const exOf=c=>{const e=Number(c.extra);return isNaN(e)||e<=0?0:e};const recv=c=>{const b=recvBase(c),e=exOf(c);return b==null&&!e?null:(b||0)+e};
 const net=c=>{const p=recv(c);return(CANCEL.has(c.status)||!p)?0:(c.source==="크레페"?Math.round(p*0.9):p)};
 const today=()=>{const d=new Date();d.setHours(0,0,0,0);return d};
 const pd=s=>{if(!s)return null;const[y,m,d]=s.split("-").map(Number);return new Date(y,m-1,d)};
@@ -1305,8 +1305,8 @@ function openJob(id,pre){
     const num=el=>{const x=el.value.replace(/[^\d]/g,"");return x?Number(x):null};
     const upSum=()=>{const b=num($("#f-qb")),a=num($("#f-qa")),ex=num($("#f-ex"))||0,p=b==null&&!ex?null:(b||0)+ex,src=$("#f-source").value;
       const parts=[];
-      if(ex)parts.push(`추가금 <b class="up">+${won(ex)}</b>`);
-      if(p!=null&&a!=null){const d=a-p;parts.push(`차액 <b class="${d>0?"up":d<0?"down":""}">${d===0?"±₩0":(d>0?"+":"−")+won(Math.abs(d))}</b>`)}
+      if(ex)parts.push(`추가금 <b class="up">+${won(ex)}</b>`,`합계 <b>${won(p)}</b> <small>(추가금 포함)</small>`);
+      if(SHOW.d!==0&&SHOW.a!==0&&p!=null&&a!=null){const d=a-p;parts.push(`차액 <b class="${d>0?"up":d<0?"down":""}">${d===0?"±₩0":(d>0?"+":"−")+won(Math.abs(d))}</b>`)}
       if(p){parts.push(`실수령 <b>${won(src==="크레페"?Math.round(p*.9):p)}</b>${src==="크레페"?" <small>(크레페 수수료 10% 제외)</small>":""}`)}
       $("#f-sum").innerHTML=parts.join('<span class="dot">·</span>')||'<small>작업 전 가격은 실제로 받은 금액, 작업 후 가격은 작업해 보니 받아야 할 금액이에요. 수익은 작업 전 가격으로 계산돼요.</small>'};
     ["#f-qb","#f-qa","#f-ex"].forEach(sel=>{const el=$(sel);el.oninput=()=>{const pos=el.value.length-el.selectionStart;const v=num(el);el.value=v==null?"":v.toLocaleString("ko-KR");const p=Math.max(0,el.value.length-pos);el.setSelectionRange(p,p);upSum()}});
@@ -1475,6 +1475,8 @@ $("#themeBtn").onclick=()=>{
     <div class="cmrow" id="mdRow"><span>테마</span><div class="cmseg">${[["system","시스템"],["light","라이트"],["dark","다크"]].map(([v,l])=>`<button type="button" data-md="${v}" class="${((cur.mode==="auto"?"system":cur.mode)||"system")===v?"on":""}">${l}</button>`).join("")}</div></div>
     <div class="swatches">${PRESETS.map(([n,c],i)=>`<button type="button" class="sw" data-sw="${c}" title="${n}" aria-label="${n}" aria-pressed="${a.toLowerCase()===c}"><i style="background:${c}"></i></button>`).join("")}</div>
     <div class="custom"><span class="hint">직접 고르기</span><input type="color" id="cc" value="${a}" aria-label="색 고르기"><input type="text" id="ch" value="${a}" maxlength="7" aria-label="색 코드"><button class="btn" type="button" id="reset">기본 색으로</button></div>
+<h2 class="sec" style="margin-top:1.25rem">가격 표시<span class="meta">끄면 목록·입력창에서 숨겨요 (금액 계산은 그대로)</span></h2>
+    ${[["b","작업 전 가격"],["a","작업 후 가격"],["d","차액"],["x","추가금"]].map(([k,l])=>`<div class="cmrow" data-show="${k}"><span>${l}</span><div class="cmseg"><button type="button" data-sv="1" class="${SHOW[k]!==0?"on":""}">켜기</button><button type="button" data-sv="0" class="${SHOW[k]===0?"on":""}">끄기</button></div></div>`).join("")}
 <div style="display:none"><h2 class="sec" style="margin-top:1.25rem">폰트<span class="meta">크기는 이 기기에만 · 글꼴은 폰·PC 함께</span></h2><p class="hint" style="margin:0 0 0.375rem">글자 크기</p>
     <div class="seg" style="grid-template-columns:repeat(4,1fr);max-width:24rem">${FS_OPTS.map(([v,l])=>`<button type="button" data-fs="${v}" aria-selected="${(load("fs")||"1")===v}">${l}</button>`).join("")}</div>
     <p class="hint" style="margin:0.75rem 0 0.375rem">글꼴</p>
@@ -1575,6 +1577,7 @@ $("#themeBtn").onclick=()=>{
     $("#addSo").onclick=()=>{so.rows.push({name:"",orig:null});draw();const ins=document.querySelectorAll("[data-sn]");ins[ins.length-1]?.focus()};
     document.querySelectorAll("[data-sw]").forEach(b=>b.onclick=()=>{cur.accent=b.dataset.sw;applyTheme(cur.accent,cur.mode);draw()});
     document.querySelectorAll("#mdRow [data-md]").forEach(b=>b.onclick=async()=>{cur.mode=b.dataset.md;before.mode=cur.mode;applyTheme(cur.accent,cur.mode);document.querySelectorAll("#mdRow [data-md]").forEach(x=>x.classList.toggle("on",x===b));try{await saveSettings({mode:cur.mode})}catch(err){toast("저장하지 못했어요")}});
+    document.querySelectorAll("[data-show] [data-sv]").forEach(b=>b.onclick=()=>{const k=b.closest("[data-show]").dataset.show;SHOW[k]=Number(b.dataset.sv);try{localStorage.setItem("cm-show",JSON.stringify(SHOW))}catch(e){}applyShow();b.parentNode.querySelectorAll("[data-sv]").forEach(x=>x.classList.toggle("on",x===b))});
     $("#cc").oninput=e=>{cur.accent=e.target.value;$("#ch").value=e.target.value;applyTheme(cur.accent,cur.mode);document.querySelectorAll("[data-sw]").forEach(b=>b.setAttribute("aria-pressed",b.dataset.sw===cur.accent.toLowerCase()))};
     $("#ch").onchange=e=>{let v=e.target.value.trim();if(!v.startsWith("#"))v="#"+v;if(HEX.test(v)){cur.accent=v.toLowerCase();applyTheme(cur.accent,cur.mode);draw()}else toast("#ff6699 같은 6자리 색 코드를 넣어 주세요")};
     $("#reset").onclick=()=>{cur.accent="";applyTheme("",cur.mode);draw()};
