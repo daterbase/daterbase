@@ -20,6 +20,13 @@ html body .list.tbl .job .net{font-size:.8125rem;font-weight:600;color:var(--ink
 html body .list.tbl .job .tags{gap:.25rem}
 html body .list.tbl .job .tg,html body .list.tbl .job .srcp{font-size:.6875rem}
 html body .list.tbl .job .st .pill{font-size:.6875rem;padding:.0625rem .5rem}
+html body .list.tbl .job.job{padding:0!important;column-gap:0!important;row-gap:0!important;align-items:stretch!important;grid-template-columns:3.6rem minmax(0,1fr) 6.4rem!important;grid-template-areas:"dd who amt" "dd tags tags"!important}html body .list.tbl .job .dd.late{box-shadow:inset 3px 0 0 var(--bad)}html body .list.tbl .job .dd.soon{box-shadow:inset 3px 0 0 #f07a1a}html body .list.tbl .job:has(.dd.late),html body .list.tbl .job:has(.dd.soon){box-shadow:none!important}
+html body .list.tbl .job .dd{display:flex!important;flex-direction:column;align-items:center;justify-content:center;padding:.5rem .25rem;border-right:1px solid var(--rule);background:var(--mute-soft,transparent)}
+html body .list.tbl .job .who{display:flex!important;align-items:center;padding:.5rem .625rem;min-width:0}
+html body .list.tbl .job .amt{display:flex!important;align-items:center;justify-content:flex-end;padding:.5rem .625rem;border-left:1px solid var(--rule)}
+html body .list.tbl .job .tags{display:flex!important;flex-wrap:wrap;padding:.375rem .625rem;border-top:1px solid var(--rule);grid-column:2/-1}
+html body .list.tbl .job .st,html body .list.tbl .job .lab,html body .list.tbl .job .src{display:flex;align-items:center;gap:.25rem}
+html body .list.tbl .job .dd.late,html body .list.tbl .job .dd.soon{background:var(--mute-soft,transparent)!important;padding:.5rem .25rem!important}
 html body .dueband{border-radius:.75rem!important}
 html body h2.sec{margin-top:1rem}
 }</style></head><body>
