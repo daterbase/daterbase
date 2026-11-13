@@ -1,32 +1,47 @@
 # 친구용 PC 설치 파일만 이 공개 저장소 릴리스로 옮겨 둠 (옛 PC 자동 업데이트 주소 유지).
 # 개인용 설치 파일(Daterbase-Setup*)은 절대 올리지 않음.
 name: friend-release
+# 11-13: 손으로 돌리는 걸 잊어서 친구용이 0.9.28에 멈춰 있었음 → 30분마다 개인용 저장소 최신 릴리스를 보고 없으면 저절로 옮겨요.
 on:
   workflow_dispatch:
     inputs:
-      tag: { description: "릴리스 태그 (예: pc-v0.9.17)", required: true }
+      tag: { description: "릴리스 태그 (예: pc-v0.9.17, 비우면 최신)", required: false }
+  schedule:
+    - cron: "*/30 * * * *"
 permissions:
   contents: write
 jobs:
   copy:
     runs-on: ubuntu-latest
     steps:
+      - name: 옮길 태그
+        id: t
+        env:
+          GH_TOKEN: ${{ secrets.SRC_TOKEN || github.token }}
+          GT: ${{ github.token }}
+        run: |
+          t="${{ inputs.tag }}"
+          [ -n "$t" ] || t=$(gh release view -R daterbase/daterbase-app --json tagName -q .tagName)
+          echo "tag=$t" >> "$GITHUB_OUTPUT"
+          if [ -z "${{ inputs.tag }}" ] && GH_TOKEN=$GT gh release view "$t" -R "$GITHUB_REPOSITORY" >/dev/null 2>&1; then echo "skip=1" >> "$GITHUB_OUTPUT"; echo "$t 이미 있음"; fi
       - name: 친구용 파일 받기
+        if: steps.t.outputs.skip != '1'
         env:
           GH_TOKEN: ${{ secrets.SRC_TOKEN || github.token }}
         run: |
           mkdir out && cd out
-          gh release download "${{ inputs.tag }}" -R daterbase/daterbase-app \
+          gh release download "${{ steps.t.outputs.tag }}" -R daterbase/daterbase-app \
             -p 'Daterbase-Friend-Setup*' -p 'friend.yml' \
-          || gh release download "${{ inputs.tag }}" -R daterbase/daterbase \
+          || gh release download "${{ steps.t.outputs.tag }}" -R daterbase/daterbase \
             -p 'Daterbase-Friend-Setup*' -p 'friend.yml'
           ls -la
           if ls | grep -q '^Daterbase-Setup'; then echo "개인용 파일이 섞였어요"; exit 1; fi
       - name: 이 저장소 릴리스로 올리기
+        if: steps.t.outputs.skip != '1'
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
           cd out
-          gh release view "${{ inputs.tag }}" -R "$GITHUB_REPOSITORY" >/dev/null 2>&1 \
-            && gh release upload "${{ inputs.tag }}" -R "$GITHUB_REPOSITORY" --clobber * \
-            || gh release create "${{ inputs.tag }}" -R "$GITHUB_REPOSITORY" --title "Daterbase PC ${{ inputs.tag }}" --notes "Daterbase PC 친구용" --latest *
+          gh release view "${{ steps.t.outputs.tag }}" -R "$GITHUB_REPOSITORY" >/dev/null 2>&1 \
+            && gh release upload "${{ steps.t.outputs.tag }}" -R "$GITHUB_REPOSITORY" --clobber * \
+            || gh release create "${{ steps.t.outputs.tag }}" -R "$GITHUB_REPOSITORY" --title "Daterbase PC ${{ steps.t.outputs.tag }}" --notes "Daterbase PC 친구용" --latest *
