@@ -3890,8 +3890,12 @@ html body .thc .thc-ph small{color:var(--muted)!important;font-size:calc(12px*va
   cols = cols.map((c) => ({ ...c, blocks: c.blocks.flatMap((x) => (x.row ? x.row : [x])).filter(vis) })).filter((c) => c.blocks.length);
   let F = cols.reduce((t, c) => t + c.w, 0) || 1,
     left = BP_C,
-    botN = (lay.bottom || []).flatMap((e) => (e.row ? e.row : [e])).filter(vis).length,
-    R = Math.max(4, BP_R - topR - (botN ? 4 : 0)),
+    /* 아래 줄이 실제로 쓰는 줄 수만큼 비워 두고, 열이 다 숨겨졌으면(숫자 띠 켜며 수익·진행·마감 숨김) 열 자리를 잡지 않음 (커미션 판 깨짐 11-16) */
+    botR = (lay.bottom || []).reduce((t, e) => {
+      let it = (e.row ? e.row : [e]).filter(vis);
+      return t + (it.length ? Math.max(...it.map((x) => rowsOf(x) || 4)) : 0);
+    }, 0),
+    R = cols.length ? Math.max(4, BP_R - topR - botR) : 0,
     c0 = 1;
   cols.forEach((c, i) => {
     let w = i === cols.length - 1 ? left : Math.max(4, Math.round((BP_C * c.w) / F));
