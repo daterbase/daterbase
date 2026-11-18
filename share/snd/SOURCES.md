@@ -20,3 +20,6 @@ Freesound files come from the HQ preview mp3 (128 kbps), not the original upload
 | ballpen_05.wav | 46.1 s | Pen writing (pen type not stated) | giddster | https://freesound.org/people/giddster/sounds/360529/ (audio: https://cdn.freesound.org/previews/360/360529_1738686-hq.mp3) | CC0 1.0 |
 
 page_flip.mp3 = page_05.wav(위 줄, CC0)에서 넘김 네 번(1.37·4.06·4.89·7.81초 '탁' 기준 앞 0.6초~뒤 0.3초)을 잘라 이은 것 (11-17).
+page_05.mp3 원본 파일은 앱이 쓰지 않아 배포에서 뺐음(11-19). 출처는 위 줄 그대로.
+
+11-19 손질(04 '중간에 거슬리는 소리가 하나씩'): 펜 녹음 11개를 같은 크기(중간값 -32dB)로 맞추고, 튀는 딸깍·쿵(주변보다 6dB 넘게 큰 곳)을 눌러 줌, 끝과 처음을 0.25초 겹쳐 이어 돌 때 크기가 뛰지 않게 함. fountain_05는 앞쪽 잉크병 소리(0~2.2초)와 끝 쿵(8.7초~)을 잘라 2.25~8.6초만 씀. 스크립트 /mnt/project-files/diary/asmr-1116/despike-1119/fix.py, 손질 전 파일은 git 4bb1aea.
