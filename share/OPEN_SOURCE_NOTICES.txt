@@ -9,12 +9,21 @@ Daterbase uses the following open source software and fonts.
 - pako (JSZip에 포함) — MIT — Copyright (C) 2014-2017 by Vitaly Puzrin and Andrei Tuputcyn
 - html2canvas — MIT — Copyright (c) 2012 Niklas von Hertzen
 - html2canvas-pro 2.5.0 — MIT — Copyright (c) 2024-present yorickshan and html2canvas-pro contributors
+- html-to-image 1.11.11 — MIT — Copyright (c) 2017-2023 W.Y. (bubkoo)
 - gifenc 1.0.3 — MIT — Copyright (c) 2017 Matt DesLauriers
 - sql.js 1.10.3 — MIT — Copyright (c) 2017 sql.js authors
+- SheetJS Community Edition (xlsx 0.18.5) — Apache License 2.0 — Copyright (C) 2012-present SheetJS LLC
 - onnxruntime-web 1.20.1 — MIT — Copyright (c) Microsoft Corporation
 - Transformers.js 3.5.1 — Apache License 2.0 — Copyright Hugging Face
 - tesseract.js 5.1.1 (Tesseract OCR, 언어 데이터 포함) — Apache License 2.0 — Copyright tesseract.js contributors / Google
 - anime-seg 모델 (skytnt) — Apache License 2.0 — Copyright skytnt
+- Leaflet 1.9.4 — BSD 2-Clause — Copyright (c) 2010-2023, Volodymyr Agafonkin; Copyright (c) 2010-2011, CloudMade
+- MapLibre GL JS 4.7.1 — BSD 3-Clause — Copyright (c) 2023, MapLibre contributors; Copyright (c) 2014-2020, Mapbox
+- maplibre-gl-leaflet 0.1.3 — ISC License — Copyright (c) maplibre-gl-leaflet contributors
+- 지도 자료 / Map data — © OpenStreetMap contributors (Open Database License), 지도 모양 OpenFreeMap. 지도 위에도 표시합니다.
+- three.js r128 + OrbitControls (공방 3D 보기, 개인용) — MIT — Copyright © 2010-2021 three.js authors
+- Lucide 아이콘 — ISC License — Copyright (c) for portions of Lucide are held by Cole Bemis 2013-2022 as part of Feather (MIT). All other copyright (c) for Lucide are held by Lucide Contributors 2022.
+- Phosphor Icons (물건·칸 그림) — MIT — Copyright (c) 2023 Phosphor Icons
 - Fluent Emoji (Microsoft, @lobehub/fluent-emoji-flat 1.1.0로 불러옴) — MIT — Copyright (c) Microsoft Corporation
 - Electron (PC 프로그램) — MIT — Copyright (c) Electron contributors, Copyright (c) 2013-2020 GitHub Inc.
   Chromium 및 포함 구성 요소의 라이선스는 설치 폴더의 LICENSES.chromium.html에 있습니다.
@@ -23,7 +32,10 @@ Daterbase uses the following open source software and fonts.
 - Pretendard — Copyright (c) 2021, Kil Hyung-jin (https://github.com/orioncactus/pretendard), with Reserved Font Name Pretendard.
   앱 안의 'DB Sans'는 Pretendard에서 일부 글자만 담아 이름을 바꾼 글꼴입니다 (OFL 1.1, 원 저작권 Kil Hyung-jin). / 'DB Sans' in the app is a renamed subset of Pretendard (OFL 1.1, original copyright Kil Hyung-jin).
 - Sedgwick Ave, Sedgwick Ave Display (앱 안에서 일부 글자만 담아 'DB Scrawl', 'DB Tag'로 사용) — Copyright 2017 The Sedgwick Ave Project Authors (https://github.com/googlefonts/sedgwickave)
-- Google Fonts에서 불러오는 글꼴: Do Hyeon, Gaegu, Nanum Gothic Coding, Nanum Myeongjo, Nanum Pen Script, Nanum Brush Script, Gowun Batang, IBM Plex Sans KR, Noto Serif KR, Anton, Oswald, Archivo, Archivo Black, Bricolage Grotesque, Inter, JetBrains Mono, Space Mono, Courier Prime, Mr Dafoe — 각 저작권자, SIL Open Font License 1.1
+- Galmuri (갈무리) — Copyright (c) 2019-2024 Lee Minseo (https://github.com/quiple/galmuri)
+- Fusion Pixel Font (fusion-pixel-12px-proportional-sc) — Copyright (c) 2022, TakWolf (https://github.com/TakWolf/fusion-pixel-font)
+- GNU Unifont — Copyright (c) 1998-2024 Roman Czyborra, Paul Hardy and Unifont contributors (OFL 1.1로 사용 / used under OFL 1.1)
+- Google Fonts에서 불러오는 글꼴: Anton, Archivo, Archivo Black, Bagel Fat One, Black And White Picture, Bricolage Grotesque, Courier Prime, Cutive Mono, Do Hyeon, Gaegu, Gowun Batang, Grandiflora One, Hahmlet, IBM Plex Sans KR, Inter, JetBrains Mono, Libre Barcode 39, Moirai One, Montserrat Subrayada, Mr Dafoe, Nanum Brush Script, Nanum Gothic Coding, Nanum Myeongjo, Nanum Pen Script, Noto Serif KR, Oswald, Space Mono, VT323 — 각 저작권자, SIL Open Font License 1.1
 
 ================================================================
 MIT License
@@ -335,3 +347,31 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
    See the License for the specific language governing permissions and
    limitations under the License.
+
+================================================================
+ISC License (Lucide, maplibre-gl-leaflet)
+
+Permission to use, copy, modify, and/or distribute this software for any purpose with or without fee is hereby granted, provided that the above copyright notice and this permission notice appear in all copies.
+
+THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+
+================================================================
+BSD 2-Clause License (Leaflet)
+
+Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
+
+1. Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
+2. Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+================================================================
+BSD 3-Clause License (MapLibre GL JS)
+
+Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
+
+1. Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
+2. Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
+3. Neither the name of the copyright holder nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
